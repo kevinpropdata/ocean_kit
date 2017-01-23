@@ -1,9 +1,10 @@
-require "../spec_helper"
+require "./../spec_helper"
 
-describe OceanKit::AccountResource do
-  # subject { Reader.new }
-  #
-  # it "can find" do
-  #
-  # end
+describe OceanKit::Resource do
+  context "Account" do
+		subject { OceanKit::Resource::Account.new }
+		it "exists" do
+				expect(subject).to_be
+  	end
+  end
 end
