@@ -1,34 +1,16 @@
 module OceanKit
 	module Actions
 
-		def get(path, options = nil)
-			if options
-				request_with_body(path, options)
+		def request(method, path, headers, options : String|Nil = nil)
+			if headers == nil
+				HTTP::Client.exec(method: method, url: "https://api.digitalocean.com/v2#{path}", headers: headers)
 			else
-				simple_request(path)
+				HTTP::Client.exec(method: method, url: "https://api.digitalocean.com/v2#{path}", headers: headers, body: options)
 			end
 		end
 
-		def post(path,options = nil)
-			simple_request_post(path, options)
-		end
-
-		def request_with_body(path, options)
-			headers = HTTP::Headers{"Authorization" => "Bearer #{OceanKit.key}", "Content-Type" => "application/json"}
-			response = HTTP::Client.get(url: "https://api.digitalocean.com/v2/#{path}", headers: headers, body: options)
-			response.body
-		end
-
-		def simple_request(path)
-			headers = HTTP::Headers{"Authorization" => "Bearer #{OceanKit.key}", "Content-Type" => "application/json"}
-			response = HTTP::Client.get(url: "https://api.digitalocean.com/v2/#{path}", headers: headers)
-			response.body
-		end
-
-		def simple_request_post(path, options)
-			headers = HTTP::Headers{"Authorization" => "Bearer #{OceanKit.key}", "Content-Type" => "application/json"}
-			response = HTTP::Client.post(url: "https://api.digitalocean.com/v2/#{path}", headers: headers, body: options)
-			response.body
+		def response(request)
+			request.body
 		end
 	end
 

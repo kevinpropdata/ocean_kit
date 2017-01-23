@@ -1,10 +1,14 @@
+require "json"
 module 	OceanKit
 	module Resource
 		class DomainRecord
 			include OceanKit::Actions
+			def initialize(headers : HTTP::Headers)
+				@headers = headers
+			end
 
 			def all
-				get("/domains")
+				request("GET", "/domains", @headers)
 			end
 
 			# Return `Object::JSON`
@@ -15,8 +19,9 @@ module 	OceanKit
 			# # => {"domain":{"name":"ymail.host","ttl":null,"zone_file":null}}
 			#```
 			#
-			def create(body)
-				post("/domains", body)
+			def create(name, ip_address)
+				body = { "name" => name, "ip_address" => ip_address }
+				request("POST", "/domains", @headers, body.to_json)
 			end
 
 
